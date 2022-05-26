@@ -46,8 +46,9 @@ describe("A board can be created:", () => {
     // expect(() => board.drop(new Block("Y"))).to.throw("already falling");
     // I think I need to make a separate method for reading the file.
 
-
-    it("but it throws \'file does not exist\' if necessary", () => {
+    // I did this backwards. But I'll leave it in anyhow.
+    // It's hard to remember the proper order of operations when a surprising bug / issue comes up.
+    it("but it throws an error if the file does not exist", () => {
       const gameOfLife = new GameOfLife("Non-existent", 0);
       expect(gameOfLife.parseRLE).to.throw()
     })
@@ -60,11 +61,26 @@ describe("A board can be created:", () => {
       expect(gameOfLife.getX()).to.equal(3);
       expect(gameOfLife.getY()).to.equal(1);
     })
-    // Is this a small enough step?
-    // I feel like it's hard to make any smaller.
-    // So let's try and see.
+    
+    it("and extract the RLE pattern", () => {
+      const gameOfLife = new GameOfLife(gliderFile, 0); 
+      expect(gameOfLife.getRLEpatternAsString()).to.equal("bob$2bo$3o!")
+    });
     xit("and parse the RLE pattern into an array", () => {
       const gameOfLife = new GameOfLife(gliderFile, 0);
+      // This feels iffy. I need to make sure I write out the correct array, otherwise the test is useless.
+      // Printing out arrays / results and then writing tests that match them is dangerous.
+      //  bob$
+      //  bbo$
+      //  ooo!
+      // I hope I saved the arrays earlier like that.
+      const gliderArr =  [
+        [0,1,0],
+        [0,0,1],
+        [0,0,0]
+      ];
+      expect(gameOfLife.getRLEarray()).to.equal(gliderArr);
+       
     })
   })
   
