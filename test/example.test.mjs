@@ -1,8 +1,19 @@
 import { expect } from "chai";
-import { sum } from "../src/example.mjs";
+import { Board } from "../src/GameOfLife.mjs";
 
-describe("Example test fixture", () => {
-  it("Example test", () => {
-    expect(sum(1, 2)).to.equal(3);
+describe("A board can be created:", () => {
+  it("With an array as a parameter", () => {
+    const array = [
+      `000`,
+      `010`,
+      `000`
+    ]
+    let board = new Board(array);
+    expect(board.toString()).to.equal(
+`000
+010
+000
+`
+    )
   });
 });
