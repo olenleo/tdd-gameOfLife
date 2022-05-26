@@ -36,15 +36,35 @@ describe("A board can be created:", () => {
     const blinkerFile = "./patterns/blinker.rle";
     const gliderFile = "./patterns/glider.rle";
 
-    
-    it("GameOfLife() can read an RLE file header", () => {
+    // I'll pause here and read up a bit.
+    // Getting proper files and sanitizing inputs feels very important
+    // On the other hand, I could perhaps trust the user a bit in this case.
+    // I'll make some tests but not too many so I won't drag this out.
+
+    // The mocha documentation is not that easy to navigate.
+    // I found this in the tetris tests though:
+    // expect(() => board.drop(new Block("Y"))).to.throw("already falling");
+    // I think I need to make a separate method for reading the file.
+
+
+    it("but it throws \'file does not exist\' if necessary", () => {
+      const gameOfLife = new GameOfLife("Non-existent", 0);
+      expect(gameOfLife.parseRLE).to.throw()
+    })
+    it("and read an RLE file header", () => {
       const gameOfLife = new GameOfLife(blockFile, 0);
       expect(gameOfLife.getRLEHeader()).to.equal(blockRLE)
     })
-    it("GameOfLife() can read RLE pattern dimensions", () => {
+    it("and read RLE pattern dimensions", () => {
       const gameOfLife = new GameOfLife(blinkerFile, 0);
       expect(gameOfLife.getX()).to.equal(3);
       expect(gameOfLife.getY()).to.equal(1);
+    })
+    // Is this a small enough step?
+    // I feel like it's hard to make any smaller.
+    // So let's try and see.
+    xit("and parse the RLE pattern into an array", () => {
+      const gameOfLife = new GameOfLife(gliderFile, 0);
     })
   })
   
