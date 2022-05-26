@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Board } from "../src/GameOfLife.mjs";
+import { Board, GameOfLife } from "../src/GameOfLife.mjs";
 
 describe("A board can be created:", () => {
   let board;
@@ -32,13 +32,15 @@ describe("A board can be created:", () => {
   // That way we can get test material without manually writing a lot of arrays.
   describe("The GameOfLife class can parse RLE files", () => {
     const blockFile = "./patterns/block.rle";
-    const blockRLE = "#N Block\n#C An extremely common 4-cell still life.\n#C www.conwaylife.com/wiki/index.php?title=Block";
+    const blockRLE = "#N Block\n#C An extremely common 4-cell still life.\n#C www.conwaylife.com/wiki/index.php?title=Block\n";
     const blinkerFile = "./patterns/blinker.rle";
     const gliderFile = "./patterns/glider.rle";
 
+    
     it("GameOfLife() can read an RLE file header", () => {
-      board = new Board(blockFile);
-      expect(board.getRLEHeader()).to.equal(blockRLE)
+      const gameOfLife = new GameOfLife(blockFile, 0);
+      
+      expect(gameOfLife.getRLEHeader()).to.equal(blockRLE)
     })
   })
   
