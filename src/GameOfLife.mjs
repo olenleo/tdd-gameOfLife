@@ -6,6 +6,8 @@ export class GameOfLife {
   #board;
   #fileData;
   #RLEHeader = "";
+  #patternWidth;
+  #patternHeight;
 
   constructor( file, tickLimit) {
     this.#file = file;
@@ -17,7 +19,13 @@ export class GameOfLife {
   getRLEHeader() {
     return this.#RLEHeader;
   }
-  
+  getX() {
+    return this.#patternWidth;
+  }
+  getY() {
+    return this.#patternHeight; 
+  }
+
   // file data needs to be parsed.
   readRLE() {
     try {
@@ -32,8 +40,12 @@ export class GameOfLife {
   }
 
   parseRLE() {
-    const headerRegex = /#.+[$|\n]/g // start w/ #, any number of chars, end with $ or \n
+    const headerRegex = /#.+[$|\n]/g 
+    const xRegex = /x\s=\s\d+/
+    const yRegex = /y\s=\s\d+/
     const arr = this.#fileData.match(headerRegex);
+    this.#patternHeight = parseInt(this.#fileData.match(yRegex)[0].match(/\d/)[0])
+    this.#patternWidth = parseInt(this.#fileData.match(xRegex)[0].match(/\d/)[0])
     for (let i in arr) {
       this.#RLEHeader += arr[i];
     }

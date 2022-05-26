@@ -39,8 +39,12 @@ describe("A board can be created:", () => {
     
     it("GameOfLife() can read an RLE file header", () => {
       const gameOfLife = new GameOfLife(blockFile, 0);
-      
       expect(gameOfLife.getRLEHeader()).to.equal(blockRLE)
+    })
+    it("GameOfLife() can read RLE pattern dimensions", () => {
+      const gameOfLife = new GameOfLife(blinkerFile, 0);
+      expect(gameOfLife.getX()).to.equal(3);
+      expect(gameOfLife.getY()).to.equal(1);
     })
   })
   
