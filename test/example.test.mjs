@@ -16,6 +16,15 @@ describe("A board can be created:", () => {
 `
       );
     });
-    it("Each cell is an integer", () => {});
+    // I misunderstood the mocha syntax here.
+    // Time to fix the test
+    // Even though it should go the other way around usually.
+    it("Each cell is an integer", () => {
+      for (let i = 0; i < board.getRows(); i++) {
+        for (let j = 0; j < board.getCols(); j++) {
+          expect(typeof board.getBoard()[i][j]).to.equal(typeof 0)
+        }
+      }
+    });
   });
 });
