@@ -61,7 +61,7 @@ export class GameOfLife {
       this.#fileData.match(xRegex)[0].match(/\d/)[0]
     );
     this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
-    this.parseRLEtoArray();
+    this.#RLEarray = this.parseRLEtoArray();
     for (let i in arr) {
       this.#RLEHeader += arr[i];
     }
@@ -94,17 +94,19 @@ export class GameOfLife {
             for (let i = 0; i < repetitions; i++) {
               row.push(current)
             }
+            repetitions =0;
           }
         }
       }
       
       toReturn[r] = this.formatRow(row);
     }
+    console.log(toReturn)
     return toReturn;
   }
   formatRow(row) {
-    for (let index = 0; index < row.length; index++) {
-      if (row[index] === "b") { row[index] = 0} else {row[index] = 1}
+    for (let i = 0; i < row.length; i++) {
+      if (row[i] === "b") { row[i] = 0} else {row[i] = 1}
     }
     return row;
   }

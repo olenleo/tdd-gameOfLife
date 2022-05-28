@@ -74,28 +74,32 @@ describe("A board can be created:", () => {
      */
     it("and handle parsing the rle syntax", () => {
       const gameOfLife = new GameOfLife(blinkerFile, 0);
-      
-      // This is ugly but it makes sense for now.
-      expect(gameOfLife.parseRLEtoArray()[0][0]).to.equal(1);
-      expect(gameOfLife.parseRLEtoArray()[0][1]).to.equal(1);
-      expect(gameOfLife.parseRLEtoArray()[0][2]).to.equal(1);
-      expect(gameOfLife.parseRLEtoArray()[0].length).to.equal(3);
+      expect(arrayEquals(gameOfLife.parseRLEtoArray(), [[1,1,1]])).to.equal(true)
     });
-    xit("and parse the RLE pattern into an array", () => {
+    it("and parse the RLE pattern into an array", () => {
       const gameOfLife = new GameOfLife(gliderFile, 0);
-      // This feels iffy. I need to make sure I write out the correct array, otherwise the test is useless.
-      // Printing out arrays / results and then writing tests that match them is dangerous.
-      // $ end of row, ! end of array, b = 0, o = 1.
-      //  bob$
-      //  bbo$
-      //  ooo!
-      // I hope I saved the arrays earlier like that.
       const gliderArr = [
         [0, 1, 0],
         [0, 0, 1],
         [1, 1, 1],
       ];
-      expect(gameOfLife.getRLEarray()).to.equal(gliderArr);
+      expect(arrayEquals(gameOfLife.getRLEarray(), gliderArr)).to.equal(true)
     });
   });
+
 });
+
+function arrayEquals(arr1, arr2) {
+  if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
+    console.log('error in length')
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    for (let j = 0; j < arr1.length; j++) {
+      if (parseInt(arr1[i][j]) !== parseInt(arr2[i][j])) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
