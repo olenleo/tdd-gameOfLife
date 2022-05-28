@@ -48,16 +48,20 @@ export class GameOfLife {
       console.error(err);
     }
   }
-  // I think this game of life program is focused on the B3/S23 ruleset.
+  // Let's figure this regex out. Looking good!
+  // Different faulty RLE files should of course be tested, but for the scope of this test I'll trust the user.
+  // Now to parse the RLE string into an array.
+  
   parseRLE() {
     const headerRegex = /#.+[$|\n]/g 
     const xRegex = /x\s=\s\d+/
     const yRegex = /y\s=\s\d+/
-    const patternRegex = /(?<=rule\s=\sB3\/S23[\n|$])[.|\n|\W|\w]*/
+    const patternRegex = /rule\s=\s.*\n([^\r\n]+)/
     const arr = this.#fileData.match(headerRegex);
     this.#patternHeight = parseInt(this.#fileData.match(yRegex)[0].match(/\d/)[0])
     this.#patternWidth = parseInt(this.#fileData.match(xRegex)[0].match(/\d/)[0])
-    this.#RLEpatternAsString = this.#fileData.match(patternRegex)[0];
+    this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
+    console.log('Found a rle pattern: ', this.#RLEpatternAsString)
     for (let i in arr) {
       this.#RLEHeader += arr[i];
     }

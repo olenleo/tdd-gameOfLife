@@ -70,6 +70,7 @@ describe("A board can be created:", () => {
       const gameOfLife = new GameOfLife(gliderFile, 0);
       // This feels iffy. I need to make sure I write out the correct array, otherwise the test is useless.
       // Printing out arrays / results and then writing tests that match them is dangerous.
+      // $ end of row, ! end of array, b = 0, o = 1.
       //  bob$
       //  bbo$
       //  ooo!
@@ -77,7 +78,7 @@ describe("A board can be created:", () => {
       const gliderArr =  [
         [0,1,0],
         [0,0,1],
-        [0,0,0]
+        [1,1,1]
       ];
       expect(gameOfLife.getRLEarray()).to.equal(gliderArr);
        
