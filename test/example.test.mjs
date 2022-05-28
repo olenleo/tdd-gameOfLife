@@ -16,23 +16,24 @@ describe("A board can be created:", () => {
 `
       );
     });
-   
+
     it("Each cell is an integer", () => {
       for (let i = 0; i < board.getRows(); i++) {
         for (let j = 0; j < board.getCols(); j++) {
-          expect(typeof board.getBoard()[i][j]).to.equal(typeof 0)
+          expect(typeof board.getBoard()[i][j]).to.equal(typeof 0);
         }
       }
     });
     // Actually we could perform a parsing of the RLE file to an array
     // And then use the board(array) method.
   });
-  
+
   // The parsing of RLE files might be a good idea to implement early.
   // That way we can get test material without manually writing a lot of arrays.
   describe("The GameOfLife class can parse RLE files", () => {
     const blockFile = "./patterns/block.rle";
-    const blockRLE = "#N Block\n#C An extremely common 4-cell still life.\n#C www.conwaylife.com/wiki/index.php?title=Block\n";
+    const blockRLE =
+      "#N Block\n#C An extremely common 4-cell still life.\n#C www.conwaylife.com/wiki/index.php?title=Block\n";
     const blinkerFile = "./patterns/blinker.rle";
     const gliderFile = "./patterns/glider.rle";
 
@@ -50,21 +51,35 @@ describe("A board can be created:", () => {
     // It's hard to remember the proper order of operations when a surprising bug / issue comes up.
     it("but it throws an error if the file does not exist", () => {
       const gameOfLife = new GameOfLife("Non-existent", 0);
-      expect(gameOfLife.parseRLE).to.throw()
-    })
+      expect(gameOfLife.parseRLE).to.throw();
+    });
     it("and read an RLE file header", () => {
       const gameOfLife = new GameOfLife(blockFile, 0);
-      expect(gameOfLife.getRLEHeader()).to.equal(blockRLE)
-    })
+      expect(gameOfLife.getRLEHeader()).to.equal(blockRLE);
+    });
     it("and read RLE pattern dimensions", () => {
       const gameOfLife = new GameOfLife(blinkerFile, 0);
       expect(gameOfLife.getX()).to.equal(3);
       expect(gameOfLife.getY()).to.equal(1);
-    })
-    
+    });
+
     it("and extract the RLE pattern", () => {
-      const gameOfLife = new GameOfLife(gliderFile, 0); 
-      expect(gameOfLife.getRLEpatternAsString()).to.equal("bob$2bo$3o!")
+      const gameOfLife = new GameOfLife(gliderFile, 0);
+      expect(gameOfLife.getRLEpatternAsString()).to.equal("bob$2bo$3o!");
+    });
+
+    /**
+     * This needs to be refactored. There's something strange going on with the 'equals'-method here.
+     * Do I need to write my own?
+     */
+    it("and handle parsing the rle syntax", () => {
+      const gameOfLife = new GameOfLife(blinkerFile, 0);
+      
+      // This is ugly but it makes sense for now.
+      expect(gameOfLife.parseRLEtoArray()[0][0]).to.equal(1);
+      expect(gameOfLife.parseRLEtoArray()[0][1]).to.equal(1);
+      expect(gameOfLife.parseRLEtoArray()[0][2]).to.equal(1);
+      expect(gameOfLife.parseRLEtoArray()[0].length).to.equal(3);
     });
     xit("and parse the RLE pattern into an array", () => {
       const gameOfLife = new GameOfLife(gliderFile, 0);
@@ -75,14 +90,12 @@ describe("A board can be created:", () => {
       //  bbo$
       //  ooo!
       // I hope I saved the arrays earlier like that.
-      const gliderArr =  [
-        [0,1,0],
-        [0,0,1],
-        [1,1,1]
+      const gliderArr = [
+        [0, 1, 0],
+        [0, 0, 1],
+        [1, 1, 1],
       ];
       expect(gameOfLife.getRLEarray()).to.equal(gliderArr);
-       
-    })
-  })
-  
+    });
+  });
 });

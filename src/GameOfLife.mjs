@@ -1,6 +1,4 @@
-import fs from 'fs';
-
-
+import fs from "fs";
 
 export class GameOfLife {
   #tickLimit;
@@ -13,12 +11,11 @@ export class GameOfLife {
   #patternWidth;
   #patternHeight;
 
-  constructor( file, tickLimit) {
+  constructor(file, tickLimit) {
     this.#file = file;
-    this.#tickLimit = tickLimit;  
+    this.#tickLimit = tickLimit;
     this.readRLE();
     // this.#board = new Board(file); <--- file needs to be converted into array first.
-    
   }
 
   getRLEarray() {
@@ -34,7 +31,7 @@ export class GameOfLife {
     return this.#patternWidth;
   }
   getY() {
-    return this.#patternHeight; 
+    return this.#patternHeight;
   }
 
   readRLE() {
@@ -43,7 +40,6 @@ export class GameOfLife {
       //console.log("File content:", data);
       this.#fileData = data;
       this.parseRLE();
-
     } catch (err) {
       console.error(err);
     }
@@ -51,24 +47,67 @@ export class GameOfLife {
   // Let's figure this regex out. Looking good!
   // Different faulty RLE files should of course be tested, but for the scope of this test I'll trust the user.
   // Now to parse the RLE string into an array.
-  
+
   parseRLE() {
-    const headerRegex = /#.+[$|\n]/g 
-    const xRegex = /x\s=\s\d+/
-    const yRegex = /y\s=\s\d+/
-    const patternRegex = /rule\s=\s.*\n([^\r\n]+)/
+    const headerRegex = /#.+[$|\n]/g;
+    const xRegex = /x\s=\s\d+/;
+    const yRegex = /y\s=\s\d+/;
+    const patternRegex = /rule\s=\s.*\n([^\r\n]+)/;
     const arr = this.#fileData.match(headerRegex);
-    this.#patternHeight = parseInt(this.#fileData.match(yRegex)[0].match(/\d/)[0])
-    this.#patternWidth = parseInt(this.#fileData.match(xRegex)[0].match(/\d/)[0])
+    this.#patternHeight = parseInt(
+      this.#fileData.match(yRegex)[0].match(/\d/)[0]
+    );
+    this.#patternWidth = parseInt(
+      this.#fileData.match(xRegex)[0].match(/\d/)[0]
+    );
     this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
-    console.log('Found a rle pattern: ', this.#RLEpatternAsString)
+    this.parseRLEtoArray();
     for (let i in arr) {
       this.#RLEHeader += arr[i];
     }
-    
-    
   }
-  
+
+  // bob$2bo$3o!
+  // TODO: Break this down to multiple methods.
+  parseRLEtoArray() {
+    const string = this.#RLEpatternAsString;
+    let rows = string.split("$");
+    console.log(rows);
+    let toReturn = []
+    for (let r = 0; r < rows.length; r++) {
+      toReturn[r] = new Array(this.#patternWidth).fill(0);
+    }
+    
+    let repetitions = 0;
+    for (let r = 0; r < rows.length; r++) {
+      let row = []
+      for (let char = 0; char < this.#patternWidth; char++) {
+        let current = rows[r][char];
+        if (!isNaN(parseInt(current))) {
+          repetitions = parseInt(current);
+        }
+        if (current === "o" || current === "b") {
+          if (repetitions === 0) {
+              row.push(current)
+            }
+          else {
+            for (let i = 0; i < repetitions; i++) {
+              row.push(current)
+            }
+          }
+        }
+      }
+      
+      toReturn[r] = this.formatRow(row);
+    }
+    return toReturn;
+  }
+  formatRow(row) {
+    for (let index = 0; index < row.length; index++) {
+      if (row[index] === "b") { row[index] = 0} else {row[index] = 1}
+    }
+    return row;
+  }
 }
 
 export class Board {
@@ -76,7 +115,7 @@ export class Board {
   #cols;
   #board;
   #file;
-  
+
   constructor(file) {
     this.#file = file;
     if (file instanceof Array) {
@@ -114,5 +153,4 @@ export class Board {
   getBoard() {
     return this.#board;
   }
- 
 }
