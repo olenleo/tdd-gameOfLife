@@ -23,7 +23,6 @@ export class GameOfLife {
     this.#tickLimit = tickLimit;
     this.readRLE();
     this.#board = new Board(this.#RLEarray); 
-    console.log('Board toString:\n', this.#board.toString())
   }
 
   getRLEarray() {
@@ -132,12 +131,9 @@ export class Board {
   #file;
 
 
-  // Line 133 => is problematic. I think.
   constructor(file) {
     this.#file = file;
     if (file instanceof Array) {
-      console.log('Recieve Array\n', file)
-      console.log('')
       this.#rows = this.#file.length;
       this.#cols = this.#file[0].length;
       this.#board = new Array(this.#rows);
@@ -153,22 +149,28 @@ export class Board {
     for (let row = 0; row < this.#rows; row++) {
      board[row] = new Array(this.#cols).fill(0);
     }
+    return board;
   }
 
   tick() {
-    let next = this.initializeEmptyBoard(this.#board); // Make changes on empty board
+    let next = []
+    next =this.initializeEmptyBoard(next); // Make changes on empty board
     for (let row = 0; row < this.#rows; row++) {
       for (let col = 0; col < this.#cols; col++) {
         const neighbours = this.countNeigbours(row, col);
-        console.log('Found ', neighbours, ' at ', row, col)
-        if (neighbours > 0) {
-          console.log('Do something')
+        const cellIsAlive =  this.#board[row][col] === 1
+        // That was a big mistake. Luckily it would have been caught soon enough.
+        if (neighbours < 2) {
+          next[row][col] = 0;
+        }
+        if (!cellIsAlive && neighbours === 3) {
+          next[row][col] = 1;
         }
       }
     }
     this.#board = next; // save changes onto #board.
   }
-  // I do feel like I should test this separately.
+  
   countNeigbours(row, col) {
     let sum = 0;
     for (let i =-1; i < 2; i++) {

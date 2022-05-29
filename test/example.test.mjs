@@ -119,7 +119,11 @@ describe("The Game Of Life rules:", () => {
     // I think I will simply write new arrays for each test.
     // This takes some more time & adds lines of code
     // But it will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
-    xit("A cell with 0 neighbours dies after a tick()", () => {
+
+    // Due to the update algorithm this does not actually test anything yet.
+    // I probably should plan out a good order of tests
+    // Or just do several ones that support each other.
+    it("A cell with 0 neighbours dies after a tick()", () => {
       const array = [`000`, `010`, `000`];
       let board = new Board(array);
       board.tick()
@@ -129,6 +133,24 @@ describe("The Game Of Life rules:", () => {
 000
 `
 );
+    })
+    // Wraparound issue. Let's make the array bigger to make the test more obvious.
+    it("A dead cell with 3 alive neighbours comes alive", () => {
+      const array = [ `00000`,
+                      `00100`, 
+                      `00010`, 
+                      `00100`,
+                      `00000`];
+      let board = new Board(array);
+      board.tick();
+      expect(board.toString()).to.equal(
+`00000
+00000
+00100
+00000
+00000
+`
+      )
     })
 
   });
