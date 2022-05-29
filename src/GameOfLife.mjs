@@ -29,19 +29,14 @@ export class GameOfLife {
   // I'm just fidgeting around and debugging right now.
   // Perhaps the tick() function does not account for the larger board?
   play() {
-    console.log("Play called");
-    console.log("Tick & limit", this.#tick);
     while (this.#tick < this.#tickLimit) {
-      console.log("tick ", this.#tick);
       this.#board.tick();
-      console.log(this.#board.toString());
       this.#tick++;
     }
     this.#finalState = this.#board;
     return this.#board.toString();
   }
   getFinalState() {
-    console.log("Final state", this.#finalState);
     return this.#finalState.toString();
   }
   getRLEarray() {

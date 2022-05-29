@@ -138,7 +138,6 @@ describe("The Game Of Life rules:", () => {
     });
 
     it("but a living cell(x,y) is not included in the sum of neighbours", () => {
-      console.log(board.toString());
       expect(board.countNeigbours(1, 2)).to.equal(3);
       expect(board.countNeigbours(1, 1)).to.equal(5);
       expect(board.countNeigbours(1, 2)).to.equal(3);
