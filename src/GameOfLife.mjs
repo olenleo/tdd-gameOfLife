@@ -39,7 +39,7 @@ export class GameOfLife {
 
   writeResultFile() {
     const path = "./result.rle";
-    const header = this.#fullRLEHeader;
+    const header = this.#fullRLEHeader +  this.parseArrayToRLE();
     try {fs.writeFileSync(path, header)
     console.log('File write complete')} catch (e) {console.log(e)}
     
@@ -98,12 +98,23 @@ export class GameOfLife {
     + this.#fileData.match(ruleRegex);
   }
 
-  /*
-    Todo: 
-      - Implement export .rle <--- 
-      - Refactor every once in a while.
-      
-  */
+  parseArrayToRLE() {
+    // start from end
+    // save current symbol, then repetitions
+    // should be relatively simple with the help of width and height.
+    // Of course non-square patterns cause problems.
+    // Since we are enlarging the board, we need to take into account the entire playing field.
+    
+    let s = ""
+    console.log(this.getBoard().toString())
+    for (let row = 9; row >= 0; row--) {
+      for (let col = 9; col >= 0; col--) {
+        s += this.#board.getStateOfCell(row,col)
+      }
+    }
+    return s
+  }
+  
   parseRLEtoArray() {
     const string = this.#RLEpatternAsString;
     let rows = string.split("$");
@@ -197,6 +208,9 @@ export class Board {
       }
     }
     this.#board = next; // save changes onto #board.
+  }
+  getStateOfCell(row, col) {
+    return this.#board[row][col]
   }
 
   countNeigbours(row, col) {

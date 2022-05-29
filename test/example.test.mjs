@@ -286,7 +286,6 @@ describe("When the tick limit has been reached:", () => {
   const read = () => {
     try { 
       let data = fs.readFileSync("./result.rle", "utf-8")
-      console.log('Data: ', data)
       return data;
     } catch (e) { throw new Error("Result.rle not created")}
   }
@@ -310,7 +309,16 @@ describe("When the tick limit has been reached:", () => {
     expect(resultData).to.contain(header);
   })
   // Without the dimensions and string the game could not be played.
+  // The .rle strings should be identical when the functionality is implemented
   it("the file './result.rle' can be imported into the program", () => {
+    game.play();
+    const data1 = read();
+    try {fs.unlink("./result.rle")} catch(e) {console.log('After: File already deleted.')}
+    const newGame = new GameOfLife('./result.rle', 0);
+    newGame.play()
+    const data2 = read();
+    console.log(data1)
+    console.log(data2)
 
   })
 
