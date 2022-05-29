@@ -95,11 +95,26 @@ describe("A board can be created:", () => {
     })
   });
 });
-  // I think I will simply write new arrays for each test.
-  // This takes some more time & adds lines of code
-  // But it will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
-  describe("The Game Of Life rules:", () => {
-    it("A cell with 0 neighbours dies after a tick()", () => {
+describe("The Game Of Life rules:", () => {
+  describe("CountNeighbours method", () =>  {
+      let board;
+      beforeEach(() => {
+        const array = [ `11000`, 
+                        `11000`, 
+                        `00000`];
+        board = new Board(array);
+      })
+      it("A living cell(x,y) is not included in the sum of neighbours", () => {
+        expect(board.countNeigbours(0,0)).to.equal(3);
+      })
+      
+      
+      
+    });
+    // I think I will simply write new arrays for each test.
+    // This takes some more time & adds lines of code
+    // But it will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
+    xit("A cell with 0 neighbours dies after a tick()", () => {
       const array = [`000`, `010`, `000`];
       let board = new Board(array);
       board.tick()

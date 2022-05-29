@@ -77,7 +77,6 @@ export class GameOfLife {
 
   /*
     Todo: 
-      - Finish up the importing of .rle files
       - Implement game of life rules
       - Implement ticks
       - Implement export .rle
@@ -142,15 +141,44 @@ export class Board {
       this.#rows = this.#file.length;
       this.#cols = this.#file[0].length;
       this.#board = new Array(this.#rows);
-      for (let row = 0; row < this.#rows; row++) {
-        this.#board[row] = new Array(this.#cols).fill(0);
-      }
+      this.initializeEmptyBoard(this.#board);
       for (let i = 0; i < this.#rows; i++) {
         for (let j = 0; j < this.#cols; j++) {
           this.#board[i][j] = parseInt(this.#file[i][j]);
         }
       }
     }
+  }
+  initializeEmptyBoard( board ) {
+    for (let row = 0; row < this.#rows; row++) {
+     board[row] = new Array(this.#cols).fill(0);
+    }
+  }
+
+  tick() {
+    let next = this.initializeEmptyBoard(this.#board); // Make changes on empty board
+    for (let row = 0; row < this.#rows; row++) {
+      for (let col = 0; col < this.#cols; col++) {
+        const neighbours = this.countNeigbours(row, col);
+        console.log('Found ', neighbours, ' at ', row, col)
+        if (neighbours > 0) {
+          console.log('Do something')
+        }
+      }
+    }
+    this.#board = next; // save changes onto #board.
+  }
+  // I do feel like I should test this separately.
+  countNeigbours(row, col) {
+    let sum = 0;
+    for (let i =-1; i < 2; i++) {
+      for (let j = -1; j < 2; j++) {
+        let r = (row + i + this.#rows) % this.#rows;
+        let c = (col + j + this.#cols) % this.#cols;
+        sum += parseInt(this.#board[r][c])
+      }
+    }
+    return sum - parseInt(this.#board[row][col]);
   }
 
   toString() {
