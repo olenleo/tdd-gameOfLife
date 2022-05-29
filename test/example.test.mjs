@@ -134,8 +134,37 @@ describe("The Game Of Life rules:", () => {
 `
 );
     })
-    // Wraparound issue. Let's make the array bigger to make the test more obvious.
-    it("A dead cell with 3 alive neighbours comes alive", () => {
+    it("A cell with 1 neighbour dies after a tick()", () => {
+      const array = [`000`, `011`, `000`];
+      let board = new Board(array);
+      board.tick()
+      expect(board.toString()).to.equal(
+        `000
+000
+000
+`
+);
+    })
+
+  it("A cell with more than 3 alive neighbours dies after a tick", () => {
+    const array = [ 
+    `00000`,
+    `00100`, 
+    `01110`, 
+    `00000`,
+    `00000`];
+let board = new Board(array);
+board.tick();
+expect(board.toString()).to.equal(
+`00000
+01010
+00000
+00100
+00000
+`)
+  });
+
+    it("A dead cell with 3 alive neighbours comes alive after a tick", () => {
       const array = [ `00000`,
                       `00100`, 
                       `00010`, 
@@ -152,7 +181,6 @@ describe("The Game Of Life rules:", () => {
 `
       )
     })
-
   });
 
 function arrayEquals(arr1, arr2) {
