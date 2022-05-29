@@ -24,10 +24,10 @@ describe("A board can be created:", () => {
         }
       }
     });
-    // Actually we could perform a parsing of the RLE file to an array
-    // And then use the board(array) method.
   });
-
+  
+  // Actually we could perform a parsing of the RLE file to an array
+  // And then use the board(array) method.
   // The parsing of RLE files might be a good idea to implement early.
   // That way we can get test material without manually writing a lot of arrays.
   describe("The GameOfLife class can parse RLE files", () => {
@@ -49,9 +49,13 @@ describe("A board can be created:", () => {
 
     // I did this backwards. But I'll leave it in anyhow.
     // It's hard to remember the proper order of operations when a surprising bug / issue comes up.
+
+    // I think my expect() here was a workaround.
+    // Maybe I can test the constructor somehow?
+    // Constructors are functions. I had the wrong syntax here.
     it("but it throws an error if the file does not exist", () => {
-      const gameOfLife = new GameOfLife("Non-existent", 0);
-      expect(gameOfLife.parseRLE).to.throw();
+      const gameOfLife = () => {new GameOfLife("Non-existent", 0);}
+      expect(gameOfLife).to.throw("Error: File does not exist");
     });
     it("and read an RLE file header", () => {
       const gameOfLife = new GameOfLife(blockFile, 0);
@@ -68,10 +72,6 @@ describe("A board can be created:", () => {
       expect(gameOfLife.getRLEpatternAsString()).to.equal("bob$2bo$3o!");
     });
 
-    /**
-     * This needs to be refactored. There's something strange going on with the 'equals'-method here.
-     * Do I need to write my own?
-     */
     it("and handle parsing the rle syntax", () => {
       const gameOfLife = new GameOfLife(blinkerFile, 0);
       expect(arrayEquals(gameOfLife.parseRLEtoArray(), [[1,1,1]])).to.equal(true)
@@ -85,6 +85,18 @@ describe("A board can be created:", () => {
       ];
       expect(arrayEquals(gameOfLife.getRLEarray(), gliderArr)).to.equal(true)
     });
+
+    it("and import the .rle pattern onto the board class", () => {
+      const gameOfLife = new GameOfLife(gliderFile,0);
+      // Not an array, a string. With proper formatting. 
+      // TODO: Helper method to trim all these test case files.
+      const gliderString =
+`010
+001
+111
+`
+      expect(gameOfLife.getBoard().toString()).to.equal(gliderString);
+    })
   });
 
 });

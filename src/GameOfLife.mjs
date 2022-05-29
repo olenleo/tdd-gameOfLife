@@ -12,10 +12,18 @@ export class GameOfLife {
   #patternHeight;
 
   constructor(file, tickLimit) {
+    // I should check the file existance here.
+    // 
+    try {
+      fs.readFileSync(file, "utf8");
+    } catch (e) {
+      throw new Error("Error: File does not exist")
+    }
     this.#file = file;
     this.#tickLimit = tickLimit;
     this.readRLE();
-    // this.#board = new Board(file); <--- file needs to be converted into array first.
+    this.#board = new Board(this.#RLEarray); 
+    console.log('Board toString:\n', this.#board.toString())
   }
 
   getRLEarray() {
@@ -34,19 +42,19 @@ export class GameOfLife {
     return this.#patternHeight;
   }
 
+  getBoard() {
+    return this.#board;
+  }
+
   readRLE() {
     try {
       const data = fs.readFileSync(this.#file, "utf8");
-      //console.log("File content:", data);
       this.#fileData = data;
       this.parseRLE();
     } catch (err) {
       console.error(err);
     }
   }
-  // Let's figure this regex out. Looking good!
-  // Different faulty RLE files should of course be tested, but for the scope of this test I'll trust the user.
-  // Now to parse the RLE string into an array.
 
   parseRLE() {
     const headerRegex = /#.+[$|\n]/g;
@@ -67,12 +75,18 @@ export class GameOfLife {
     }
   }
 
-  // bob$2bo$3o!
-  // TODO: Break this down to multiple methods.
+  /*
+    Todo: 
+      - Finish up the importing of .rle files
+      - Implement game of life rules
+      - Implement ticks
+      - Implement export .rle
+      - Refactor every once in a while.
+      
+  */
   parseRLEtoArray() {
     const string = this.#RLEpatternAsString;
     let rows = string.split("$");
-    console.log(rows);
     let toReturn = []
     for (let r = 0; r < rows.length; r++) {
       toReturn[r] = new Array(this.#patternWidth).fill(0);
@@ -94,16 +108,16 @@ export class GameOfLife {
             for (let i = 0; i < repetitions; i++) {
               row.push(current)
             }
-            repetitions =0;
+            repetitions = 0;
           }
         }
       }
       
       toReturn[r] = this.formatRow(row);
     }
-    console.log(toReturn)
     return toReturn;
   }
+
   formatRow(row) {
     for (let i = 0; i < row.length; i++) {
       if (row[i] === "b") { row[i] = 0} else {row[i] = 1}
@@ -118,9 +132,13 @@ export class Board {
   #board;
   #file;
 
+
+  // Line 133 => is problematic. I think.
   constructor(file) {
     this.#file = file;
     if (file instanceof Array) {
+      console.log('Recieve Array\n', file)
+      console.log('')
       this.#rows = this.#file.length;
       this.#cols = this.#file[0].length;
       this.#board = new Array(this.#rows);
