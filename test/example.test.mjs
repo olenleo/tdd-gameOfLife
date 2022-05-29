@@ -96,7 +96,7 @@ describe("A board can be created:", () => {
   });
 });
 describe("The Game Of Life rules:", () => {
-  describe("CountNeighbours method", () =>  {
+  describe("A cell can count it's living neighbours:", () =>  {
       let board;
       beforeEach(() => {
         const array = [ `11000`, 
@@ -104,8 +104,13 @@ describe("The Game Of Life rules:", () => {
                         `00000`];
         board = new Board(array);
       })
-      it("A living cell(x,y) is not included in the sum of neighbours", () => {
+      it("but a living cell(x,y) is not included in the sum of neighbours", () => {
         expect(board.countNeigbours(0,0)).to.equal(3);
+      })
+      it("wrapping around over the borders", () => {
+        expect(board.countNeigbours(2,0)).to.equal(4);
+        expect(board.countNeigbours(1,4)).to.equal(2);
+        expect(board.countNeigbours(2,2)).to.equal(2)
       })
       
       
