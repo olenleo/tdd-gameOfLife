@@ -1,8 +1,11 @@
 import { expect } from "chai";
 import { Board, GameOfLife } from "../src/GameOfLife.mjs";
 
+
+
 describe("A board can be created:", () => {
   let board;
+  
   describe("With an array as a parameter", () => {
     beforeEach(() => {
       const array = [`000`, `010`, `000`];
@@ -194,12 +197,12 @@ expect(board.toString()).to.equal(
 11
 `); 
   });
-  // There's a serious bug in the rle import stage
   // A blinker needs at least a 3x3 square to work.
-  // I'm going to need to implement the necessary changes.
-  // The question is, shoud I automatically edit the grid to a larger one to allow glider movement etc.
+  // I'll make some changes:
+  // The board dimensions will be 10x10 (to facilitate writing tests; further development could implement dynamic board sizes)
+  // A pattern will be placed into the center.
+  
 
-  // The editing of all tests will take some time.
     xit("A blinker changes state", () => {
       let game = new GameOfLife("./patterns/blinker.rle", 1);
       game.play();
