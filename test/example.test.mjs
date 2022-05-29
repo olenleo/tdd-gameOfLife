@@ -1,14 +1,12 @@
 import { expect } from "chai";
 import { Board, GameOfLife } from "../src/GameOfLife.mjs";
 
-
-
 describe("A board can be created:", () => {
   let board;
-  // I'm thinking the array top left square should be 
+  // I'm thinking the array top left square should be
   // [rows/2-patternWidth / 2][cols/2 - patternWidth/2]
   // Apparently I counted wrong again.
-  
+
   describe("With an array as a parameter", () => {
     beforeEach(() => {
       const array = [`111`, `111`, `111`];
@@ -16,7 +14,7 @@ describe("A board can be created:", () => {
     });
     it("Board.toString() returns a formatted string", () => {
       expect(board.toString()).to.equal(
-`0000000000
+        `0000000000
 0000000000
 0000000000
 0000000000
@@ -38,7 +36,7 @@ describe("A board can be created:", () => {
       }
     });
   });
-  
+
   describe("The GameOfLife class can parse RLE files", () => {
     const blockFile = "./patterns/block.rle";
     const blockRLE =
@@ -63,7 +61,9 @@ describe("A board can be created:", () => {
     // Maybe I can test the constructor somehow?
     // Constructors are functions. I had the wrong syntax here.
     it("but it throws an error if the file does not exist", () => {
-      const gameOfLife = () => {new GameOfLife("Non-existent", 0);}
+      const gameOfLife = () => {
+        new GameOfLife("Non-existent", 0);
+      };
       expect(gameOfLife).to.throw("Error: File does not exist");
     });
     it("and read an RLE file header", () => {
@@ -83,7 +83,9 @@ describe("A board can be created:", () => {
 
     it("and handle parsing the rle syntax", () => {
       const gameOfLife = new GameOfLife(blinkerFile, 0);
-      expect(arrayEquals(gameOfLife.parseRLEtoArray(), [[1,1,1]])).to.equal(true)
+      expect(arrayEquals(gameOfLife.parseRLEtoArray(), [[1, 1, 1]])).to.equal(
+        true
+      );
     });
     it("and parse the RLE pattern into an array", () => {
       const gameOfLife = new GameOfLife(gliderFile, 0);
@@ -92,15 +94,14 @@ describe("A board can be created:", () => {
         [0, 0, 1],
         [1, 1, 1],
       ];
-      expect(arrayEquals(gameOfLife.getRLEarray(), gliderArr)).to.equal(true)
+      expect(arrayEquals(gameOfLife.getRLEarray(), gliderArr)).to.equal(true);
     });
     // Alternative 1: Change all test string patterns
     // Alternative 2: Method that checks a specific area on the board.
     // Due to moving patterns (eg. glider or any gun) perhaps a manual edit is better.
     it("and import the .rle pattern onto the board class", () => {
-      const gameOfLife = new GameOfLife(gliderFile,0);
-      const gliderString =
-`0000000000
+      const gameOfLife = new GameOfLife(gliderFile, 0);
+      const gliderString = `0000000000
 0000000000
 0000000000
 0000000000
@@ -110,59 +111,56 @@ describe("A board can be created:", () => {
 0000000000
 0000000000
 0000000000
-`
+`;
       expect(gameOfLife.getBoard().toString()).to.equal(gliderString);
-    })
+    });
   });
 });
 describe("The Game Of Life rules:", () => {
   // I feel like I've covered the counting.
   // This is where mutation testing would be useful I guess?
-  describe("A cell can count it's living neighbours:", () =>  {
-      let board;
-      beforeEach(() => {
-        const array = [ 
-          `1100100011`, 
-          `1100000000`,
-          `1100000000`, 
-          `0000000000`,
-          `0000000000`, 
-          `1100000011`,
-          `0000000000`, 
-          `1100000011`,
-          `0000000000`, 
-          `1100100011`          
-                        ];
-        board = new Board(array);
-      })
-      
-      it("but a living cell(x,y) is not included in the sum of neighbours", () => {
-        console.log(board.toString())
-        expect(board.countNeigbours(1,2)).to.equal(3);
-        expect(board.countNeigbours(1,1)).to.equal(5)
-        expect(board.countNeigbours(1,2)).to.equal(3)
-      })
-      it("wrapping around over the borders", () => {
-        expect(board.countNeigbours(0,3)).to.equal(2);
-        expect(board.countNeigbours(6,0)).to.equal(6);
-      })
-      
-      
-      
+  describe("A cell can count it's living neighbours:", () => {
+    let board;
+    beforeEach(() => {
+      const array = [
+        `1100100011`,
+        `1100000000`,
+        `1100000000`,
+        `0000000000`,
+        `0000000000`,
+        `1100000011`,
+        `0000000000`,
+        `1100000011`,
+        `0000000000`,
+        `1100100011`,
+      ];
+      board = new Board(array);
     });
-    // I think I will simply write new arrays for each test.
-    // This takes some more time & adds lines of code
-    // But it will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
 
-    // Due to the update algorithm this does not actually test anything yet.
-    // I probably should plan out a good order of tests
-    // Or just do several ones that support each other.
-    it("A cell with 0 neighbours dies after a tick()", () => {
-      const array = [`000`, `010`, `000`];
-      let board = new Board(array);
-      board.tick()
-      expect(board.toString()).to.equal(
-`0000000000
+    it("but a living cell(x,y) is not included in the sum of neighbours", () => {
+      console.log(board.toString());
+      expect(board.countNeigbours(1, 2)).to.equal(3);
+      expect(board.countNeigbours(1, 1)).to.equal(5);
+      expect(board.countNeigbours(1, 2)).to.equal(3);
+    });
+    it("wrapping around over the borders", () => {
+      expect(board.countNeigbours(0, 3)).to.equal(2);
+      expect(board.countNeigbours(6, 0)).to.equal(6);
+    });
+  });
+  // I think I will simply write new arrays for each test.
+  // This takes some more time & adds lines of code
+  // But it will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
+
+  // Due to the update algorithm this does not actually test anything yet.
+  // I probably should plan out a good order of tests
+  // Or just do several ones that support each other.
+  it("A cell with 0 neighbours dies after a tick()", () => {
+    const array = [`000`, `010`, `000`];
+    let board = new Board(array);
+    board.tick();
+    expect(board.toString()).to.equal(
+      `0000000000
 0000000000
 0000000000
 0000000000
@@ -173,14 +171,14 @@ describe("The Game Of Life rules:", () => {
 0000000000
 0000000000
 `
-);
-    })
-    it("A cell with 1 neighbour dies after a tick()", () => {
-      const array = [`000`, `011`, `000`];
-      let board = new Board(array);
-      board.tick()
-      expect(board.toString()).to.equal(
-        `0000000000
+    );
+  });
+  it("A cell with 1 neighbour dies after a tick()", () => {
+    const array = [`000`, `011`, `000`];
+    let board = new Board(array);
+    board.tick();
+    expect(board.toString()).to.equal(
+      `0000000000
 0000000000
 0000000000
 0000000000
@@ -191,12 +189,11 @@ describe("The Game Of Life rules:", () => {
 0000000000
 0000000000
 `
-);
-    })
-    
-  
+    );
+  });
+
   it("A cell with more than 3 alive neighbours dies after a tick", () => {
-    const array = [ 
+    const array = [
       `0000000000`,
       `0010000000`,
       `0111000000`,
@@ -206,12 +203,12 @@ describe("The Game Of Life rules:", () => {
       `0000000000`,
       `0000000000`,
       `0000000000`,
-      `0000000000`
-      ];
-let board = new Board(array);
-board.tick();
-expect(board.toString()).to.equal(
-`0000000000
+      `0000000000`,
+    ];
+    let board = new Board(array);
+    board.tick();
+    expect(board.toString()).to.equal(
+      `0000000000
 0111000000
 0101000000
 0111000000
@@ -222,20 +219,16 @@ expect(board.toString()).to.equal(
 0000000000
 0000000000
 `
-)
+    );
   });
-    // Well, all I can say is that tests are useful.
-    // Forgot to make sure cells remain alive when conditions are met.
-    it("A dead cell with 3 alive neighbours comes alive after a tick", () => {
-      const array = [ `00000`,
-                      `00100`, 
-                      `00010`, 
-                      `00100`,
-                      `00000`];
-      let board = new Board(array);
-      board.tick();
-      expect(board.toString()).to.equal(
-`0000000000
+  // Well, all I can say is that tests are useful.
+  // Forgot to make sure cells remain alive when conditions are met.
+  it("A dead cell with 3 alive neighbours comes alive after a tick", () => {
+    const array = [`00000`, `00100`, `00010`, `00100`, `00000`];
+    let board = new Board(array);
+    board.tick();
+    expect(board.toString()).to.equal(
+      `0000000000
 0000000000
 0000000000
 0000000000
@@ -246,18 +239,18 @@ expect(board.toString()).to.equal(
 0000000000
 0000000000
 `
-      )
-    })
+    );
   });
+});
 
-  // Time to implement the tick functionality.
-  // The game of life is played for n ticks, then create ./result.rle.
-  // I will make the tests & functionality for the ticks first.
-  describe("The board state updates according to the game of life rules after ticks", () => {
-    it("A block remains unchanged", () => {
-      let game = new GameOfLife("./patterns/block.rle", 1);
-      expect(game.getBoard().toString()).to.equal(
-        `0000000000
+// Time to implement the tick functionality.
+// The game of life is played for n ticks, then create ./result.rle.
+// I will make the tests & functionality for the ticks first.
+describe("The board state updates according to the game of life rules after ticks", () => {
+  it("A block remains unchanged", () => {
+    let game = new GameOfLife("./patterns/block.rle", 1);
+    expect(game.getBoard().toString()).to.equal(
+      `0000000000
 0000000000
 0000000000
 0000000000
@@ -268,17 +261,17 @@ expect(board.toString()).to.equal(
 0000000000
 0000000000
 `
-); 
+    );
   });
   // I'm rushing through this to meet all my deadlines.
   // This means that I should spend a lot more time making useful, valid tests!
   // I'll leave a comment in the 'palautussovellus' regarding this.
 
-    it("A blinker changes state", () => {
-      let game = new GameOfLife("./patterns/blinker.rle", 1);
-      
-      expect(game.play()).to.equal(
-        `0000000000
+  it("A blinker changes state", () => {
+    let game = new GameOfLife("./patterns/blinker.rle", 1);
+
+    expect(game.play()).to.equal(
+      `0000000000
 0000000000
 0000000000
 0000001000
@@ -288,13 +281,14 @@ expect(board.toString()).to.equal(
 0000000000
 0000000000
 0000000000
-`);
-    })
+`
+    );
   });
+});
 
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
-    console.log('error in length')
+    console.log("error in length");
     return false;
   }
   for (let i = 0; i < arr1.length; i++) {
