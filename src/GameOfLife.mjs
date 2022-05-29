@@ -42,12 +42,7 @@ export class GameOfLife {
     const header = this.#fullRLEHeader;
     try {fs.writeFileSync(path, header)
     console.log('File write complete')} catch (e) {console.log(e)}
-    try {
-      const data = fs.readFileSync(path, "utf-8")
-
-    } catch(e) {
-      console.log('Error in read', e)
-    }
+    
   }
 
   getFinalState() {
@@ -88,17 +83,19 @@ export class GameOfLife {
     const xRegex = /x\s=\s\d+/;
     const yRegex = /y\s=\s\d+/;
     const patternRegex = /rule\s=\s.*\n([^\r\n]+)/;
+    const ruleRegex = /rule\s=\s.+[\n|$]/
     const arr = this.#fileData.match(headerRegex);
     this.#patternHeight = parseInt(
       this.#fileData.match(yRegex)[0].match(/\d/)[0]);
     this.#patternWidth = parseInt(
       this.#fileData.match(xRegex)[0].match(/\d/)[0]);
-      this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
+    this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
     this.#RLEarray = this.parseRLEtoArray();
     for (let i in arr) {
       this.#RLEHeader += arr[i];
     }
-    this.#fullRLEHeader = this.#RLEHeader + "\n" + this.#patternWidth + this.#patternHeight + this.#RLEpatternAsString;
+    this.#fullRLEHeader = this.#RLEHeader + this.#fileData.match(xRegex)[0] + " " + this.#fileData.match(yRegex)[0] + " "
+    + this.#fileData.match(ruleRegex);
   }
 
   /*
