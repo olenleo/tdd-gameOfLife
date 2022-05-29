@@ -26,10 +26,6 @@ describe("A board can be created:", () => {
     });
   });
   
-  // Actually we could perform a parsing of the RLE file to an array
-  // And then use the board(array) method.
-  // The parsing of RLE files might be a good idea to implement early.
-  // That way we can get test material without manually writing a lot of arrays.
   describe("The GameOfLife class can parse RLE files", () => {
     const blockFile = "./patterns/block.rle";
     const blockRLE =
@@ -98,8 +94,24 @@ describe("A board can be created:", () => {
       expect(gameOfLife.getBoard().toString()).to.equal(gliderString);
     })
   });
-
 });
+  // I think I will simply write new arrays for each test.
+  // This takes some more time & adds lines of code
+  // But it will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
+  describe("The Game Of Life rules:", () => {
+    it("A cell with 0 neighbours dies after a tick()", () => {
+      const array = [`000`, `010`, `000`];
+      let board = new Board(array);
+      board.tick()
+      expect(board.toString()).to.equal(
+        `000
+000
+000
+`
+);
+    })
+
+  });
 
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
