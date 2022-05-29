@@ -183,6 +183,11 @@ expect(board.toString()).to.equal(
     })
   });
 
+  // Time to implement the tick functionality.
+  // The game of life is played for n ticks, then create ./result.rle.
+  // I will make the tests & functionality for the ticks first.
+
+
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
     console.log('error in length')
