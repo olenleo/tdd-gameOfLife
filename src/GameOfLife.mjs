@@ -9,6 +9,7 @@ export class GameOfLife {
   #RLEHeader = "";
   #RLEarray = [];
   #RLEpatternAsString;
+  #fullRLEHeader;
   #patternWidth;
   #patternHeight;
   #finalState = [];
@@ -26,16 +27,29 @@ export class GameOfLife {
     this.#board = new Board(this.#RLEarray);
   }
 
-  // I'm just fidgeting around and debugging right now.
-  // Perhaps the tick() function does not account for the larger board?
   play() {
     while (this.#tick < this.#tickLimit) {
       this.#board.tick();
       this.#tick++;
     }
     this.#finalState = this.#board;
+    this.writeResultFile()
     return this.#board.toString();
   }
+
+  writeResultFile() {
+    const path = "./result.rle";
+    const header = this.#fullRLEHeader;
+    try {fs.writeFileSync(path, header)
+    console.log('File write complete')} catch (e) {console.log(e)}
+    try {
+      const data = fs.readFileSync(path, "utf-8")
+
+    } catch(e) {
+      console.log('Error in read', e)
+    }
+  }
+
   getFinalState() {
     return this.#finalState.toString();
   }
@@ -76,16 +90,15 @@ export class GameOfLife {
     const patternRegex = /rule\s=\s.*\n([^\r\n]+)/;
     const arr = this.#fileData.match(headerRegex);
     this.#patternHeight = parseInt(
-      this.#fileData.match(yRegex)[0].match(/\d/)[0]
-    );
+      this.#fileData.match(yRegex)[0].match(/\d/)[0]);
     this.#patternWidth = parseInt(
-      this.#fileData.match(xRegex)[0].match(/\d/)[0]
-    );
-    this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
+      this.#fileData.match(xRegex)[0].match(/\d/)[0]);
+      this.#RLEpatternAsString = this.#fileData.match(patternRegex)[1];
     this.#RLEarray = this.parseRLEtoArray();
     for (let i in arr) {
       this.#RLEHeader += arr[i];
     }
+    this.#fullRLEHeader = this.#RLEHeader + "\n" + this.#patternWidth + this.#patternHeight + this.#RLEpatternAsString;
   }
 
   /*

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Board, GameOfLife } from "../src/GameOfLife.mjs";
-
+import fs from 'fs'
 describe("A board can be created:", () => {
   let board;
   // I'm thinking the array top left square should be
@@ -96,9 +96,6 @@ describe("A board can be created:", () => {
       ];
       expect(arrayEquals(gameOfLife.getRLEarray(), gliderArr)).to.equal(true);
     });
-    // Alternative 1: Change all test string patterns
-    // Alternative 2: Method that checks a specific area on the board.
-    // Due to moving patterns (eg. glider or any gun) perhaps a manual edit is better.
     it("and import the .rle pattern onto the board class", () => {
       const gameOfLife = new GameOfLife(gliderFile, 0);
       const gliderString = `0000000000
@@ -117,8 +114,6 @@ describe("A board can be created:", () => {
   });
 });
 describe("The Game Of Life rules:", () => {
-  // I feel like I've covered the counting.
-  // This is where mutation testing would be useful I guess?
   describe("A cell can count it's living neighbours:", () => {
     let board;
     beforeEach(() => {
@@ -284,6 +279,39 @@ describe("The board state updates according to the game of life rules after tick
     );
   });
 });
+
+describe("When the tick limit has been reached:", () => {
+  let pattern = "./patterns/blinker.rle"
+  let game;
+  const read = () => {
+    try { 
+      let data = fs.readFileSync("./result.rle", "utf-8")
+      console.log('Data: ', data)
+      return data;
+    } catch (e) { throw new Error("Result.rle not created")}
+  }
+  beforeEach(() => {
+    try {fs.unlink("./result.rle")} catch(e) {console.log('Before: File already deleted.')}
+  });
+  afterEach(() => {
+    try {fs.unlink("./result.rle")} catch(e) {console.log('After: File already deleted.')}
+  });
+
+  it("the file './result.rle' is created", () => {
+    game = new GameOfLife(pattern,3)
+    game.play();
+    expect(read).to.not.throw()
+  });
+
+  it("the file './result.rle' contains a header", () => {
+
+  })
+  // Without the dimensions and string the game could not be played.
+  it("the file './result.rle' can be imported into the program", () => {
+
+  })
+
+})
 
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
