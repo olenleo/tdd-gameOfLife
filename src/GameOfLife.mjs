@@ -26,17 +26,19 @@ export class GameOfLife {
     this.#board = new Board(this.#RLEarray);
   }
 
-
+  // I'm just fidgeting around and debugging right now.
+  // Perhaps the tick() function does not account for the larger board?
   play() {
     console.log('Play called')
     console.log('Tick & limit', this.#tick)
-    while (this.#tick <= this.#tickLimit) {
+    while (this.#tick < this.#tickLimit) {
       console.log('tick ', this.#tick)
       this.#board.tick();
+      console.log(this.#board.toString())
       this.#tick++;
     }
     this.#finalState = this.#board;
-    return this.#finalState;
+    return this.#board.toString();
   }
   getFinalState() {
     console.log('Final state', this.#finalState)
@@ -171,6 +173,10 @@ export class Board {
     return board;
   }
 
+  // So I have a bug in my tick() method.
+  // That's why the blinker does not work.
+  // Or, the bug lies in countNeighbours.
+  // Off to make more tests.
   tick() {
     let next = []
     next =this.initializeEmptyBoard(next); // Make changes on empty board
@@ -178,12 +184,14 @@ export class Board {
       for (let col = 0; col < this.#cols; col++) {
         const neighbours = this.countNeigbours(row, col);
         const cellIsAlive =  this.#board[row][col] === 1
-        // That was a big mistake. Luckily it would have been caught soon enough.
-        if (neighbours < 2) {
+        if (neighbours < 2 || neighbours > 3) {
           next[row][col] = 0;
         }
-        if (!cellIsAlive && neighbours === 3) {
+        else if (!cellIsAlive && neighbours === 3) {
           next[row][col] = 1;
+        }
+        else {
+          next[row][col] = this.#board[row][col];
         }
       }
     }

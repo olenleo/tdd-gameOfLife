@@ -116,16 +116,17 @@ describe("A board can be created:", () => {
   });
 });
 describe("The Game Of Life rules:", () => {
-  // I'll rewrite the entire test.
+  // I feel like I've covered the counting.
+  // This is where mutation testing would be useful I guess?
   describe("A cell can count it's living neighbours:", () =>  {
       let board;
       beforeEach(() => {
         const array = [ 
           `1100100011`, 
-          `1100000011`,
-          `1100000011`, 
-          `1100000011`,
-          `1100000011`, 
+          `1100000000`,
+          `1100000000`, 
+          `0000000000`,
+          `0000000000`, 
           `1100000011`,
           `0000000000`, 
           `1100000011`,
@@ -138,6 +139,8 @@ describe("The Game Of Life rules:", () => {
       it("but a living cell(x,y) is not included in the sum of neighbours", () => {
         console.log(board.toString())
         expect(board.countNeigbours(1,2)).to.equal(3);
+        expect(board.countNeigbours(1,1)).to.equal(5)
+        expect(board.countNeigbours(1,2)).to.equal(3)
       })
       it("wrapping around over the borders", () => {
         expect(board.countNeigbours(0,3)).to.equal(2);
@@ -190,31 +193,39 @@ describe("The Game Of Life rules:", () => {
 `
 );
     })
-
+    
+  
   it("A cell with more than 3 alive neighbours dies after a tick", () => {
     const array = [ 
-    `00000`,
-    `00100`, 
-    `01110`, 
-    `00000`,
-    `00000`];
+      `0000000000`,
+      `0010000000`,
+      `0111000000`,
+      `0010000000`,
+      `0000000000`,
+      `0000000000`,
+      `0000000000`,
+      `0000000000`,
+      `0000000000`,
+      `0000000000`
+      ];
 let board = new Board(array);
 board.tick();
 expect(board.toString()).to.equal(
 `0000000000
+0111000000
+0101000000
+0111000000
 0000000000
 0000000000
 0000000000
-0000101000
-0000000000
-0000010000
 0000000000
 0000000000
 0000000000
 `
 )
   });
-
+    // Well, all I can say is that tests are useful.
+    // Forgot to make sure cells remain alive when conditions are met.
     it("A dead cell with 3 alive neighbours comes alive after a tick", () => {
       const array = [ `00000`,
                       `00100`, 
@@ -229,7 +240,7 @@ expect(board.toString()).to.equal(
 0000000000
 0000000000
 0000000000
-0000010000
+0000011000
 0000000000
 0000000000
 0000000000
@@ -246,23 +257,38 @@ expect(board.toString()).to.equal(
     it("A block remains unchanged", () => {
       let game = new GameOfLife("./patterns/block.rle", 1);
       expect(game.getBoard().toString()).to.equal(
-`11
-11
-`); 
+        `0000000000
+0000000000
+0000000000
+0000000000
+0000110000
+0000110000
+0000000000
+0000000000
+0000000000
+0000000000
+`
+); 
   });
-  // A blinker needs at least a 3x3 square to work.
-  // I'll make some changes:
-  // The board dimensions will be 10x10 (to facilitate writing tests; further development could implement dynamic board sizes)
-  // A pattern will be placed into the center.
-  
+  // I'm rushing through this to meet all my deadlines.
+  // This means that I should spend a lot more time making useful, valid tests!
+  // I'll leave a comment in the 'palautussovellus' regarding this.
 
-    xit("A blinker changes state", () => {
+    it("A blinker changes state", () => {
       let game = new GameOfLife("./patterns/blinker.rle", 1);
-      game.play();
-      expect(game.getFinalState()).to.equal(
-`1
-1
-1`);
+      
+      expect(game.play()).to.equal(
+        `0000000000
+0000000000
+0000000000
+0000001000
+0000001000
+0000001000
+0000000000
+0000000000
+0000000000
+0000000000
+`);
     })
   });
 
