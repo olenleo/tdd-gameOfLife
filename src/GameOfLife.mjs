@@ -2,6 +2,7 @@ import fs from "fs";
 
 export class GameOfLife {
   #tickLimit;
+  #tick;
   #file;
   #board;
   #fileData;
@@ -10,10 +11,9 @@ export class GameOfLife {
   #RLEpatternAsString;
   #patternWidth;
   #patternHeight;
+  #finalState = [];
 
   constructor(file, tickLimit) {
-    // I should check the file existance here.
-    // 
     try {
       fs.readFileSync(file, "utf8");
     } catch (e) {
@@ -21,10 +21,27 @@ export class GameOfLife {
     }
     this.#file = file;
     this.#tickLimit = tickLimit;
+    this.#tick = 0;
     this.readRLE();
-    this.#board = new Board(this.#RLEarray); 
+    this.#board = new Board(this.#RLEarray);
   }
 
+
+  play() {
+    console.log('Play called')
+    console.log('Tick & limit', this.#tick)
+    while (this.#tick <= this.#tickLimit) {
+      console.log('tick ', this.#tick)
+      this.#board.tick();
+      this.#tick++;
+    }
+    this.#finalState = this.#board;
+    return this.#finalState;
+  }
+  getFinalState() {
+    console.log('Final state', this.#finalState)
+    return this.#finalState.toString();
+  }
   getRLEarray() {
     return this.#RLEarray;
   }

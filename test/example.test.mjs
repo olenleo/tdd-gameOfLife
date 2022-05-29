@@ -186,7 +186,27 @@ expect(board.toString()).to.equal(
   // Time to implement the tick functionality.
   // The game of life is played for n ticks, then create ./result.rle.
   // I will make the tests & functionality for the ticks first.
-
+  describe("The board state updates according to the game of life rules after ticks", () => {
+    it("A block remains unchanged", () => {
+      let game = new GameOfLife("./patterns/block.rle", 1);
+      expect(game.getBoard().toString()).to.equal(
+`11
+11
+`); 
+  });
+  // There's a serious bug in the rle import stage
+  // A blinker needs at least a 3x3 square to work.
+  // I'm going to need to implement the necessary changes.
+  // The question is, shoud I automatically edit the grid to a larger one to allow glider movement etc.
+    it("A blinker changes state", () => {
+      let game = new GameOfLife("./patterns/blinker.rle", 1);
+      game.play();
+      expect(game.getFinalState()).to.equal(
+`1
+1
+1`);
+    })
+  });
 
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
