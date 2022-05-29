@@ -291,6 +291,7 @@ describe("When the tick limit has been reached:", () => {
     } catch (e) { throw new Error("Result.rle not created")}
   }
   beforeEach(() => {
+    game = new GameOfLife(pattern,3)
     try {fs.unlink("./result.rle")} catch(e) {console.log('Before: File already deleted.')}
   });
   afterEach(() => {
@@ -298,13 +299,15 @@ describe("When the tick limit has been reached:", () => {
   });
 
   it("the file './result.rle' is created", () => {
-    game = new GameOfLife(pattern,3)
     game.play();
     expect(read).to.not.throw()
   });
 
   it("the file './result.rle' contains a header", () => {
-
+    const header = game.getRLEHeader();
+    game.play();
+    const resultData = read();
+    expect(resultData).to.contain(header);
   })
   // Without the dimensions and string the game could not be played.
   it("the file './result.rle' can be imported into the program", () => {
