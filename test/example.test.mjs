@@ -5,17 +5,27 @@ import { Board, GameOfLife } from "../src/GameOfLife.mjs";
 
 describe("A board can be created:", () => {
   let board;
+  // I'm thinking the array top left square should be 
+  // [rows/2-patternWidth / 2][cols/2 - patternWidth/2]
+  // Apparently I counted wrong again.
   
   describe("With an array as a parameter", () => {
     beforeEach(() => {
-      const array = [`000`, `010`, `000`];
+      const array = [`111`, `111`, `111`];
       board = new Board(array);
     });
     it("Board.toString() returns a formatted string", () => {
       expect(board.toString()).to.equal(
-        `000
-010
-000
+`0000000000
+0000000000
+0000000000
+0000000000
+0000111000
+0000111000
+0000111000
+0000000000
+0000000000
+0000000000
 `
       );
     });
@@ -84,36 +94,54 @@ describe("A board can be created:", () => {
       ];
       expect(arrayEquals(gameOfLife.getRLEarray(), gliderArr)).to.equal(true)
     });
-
+    // Alternative 1: Change all test string patterns
+    // Alternative 2: Method that checks a specific area on the board.
+    // Due to moving patterns (eg. glider or any gun) perhaps a manual edit is better.
     it("and import the .rle pattern onto the board class", () => {
       const gameOfLife = new GameOfLife(gliderFile,0);
-      // Not an array, a string. With proper formatting. 
-      // TODO: Helper method to trim all these test case files.
       const gliderString =
-`010
-001
-111
+`0000000000
+0000000000
+0000000000
+0000000000
+0000010000
+0000001000
+0000111000
+0000000000
+0000000000
+0000000000
 `
       expect(gameOfLife.getBoard().toString()).to.equal(gliderString);
     })
   });
 });
 describe("The Game Of Life rules:", () => {
+  // I'll rewrite the entire test.
   describe("A cell can count it's living neighbours:", () =>  {
       let board;
       beforeEach(() => {
-        const array = [ `11000`, 
-                        `11000`, 
-                        `00000`];
+        const array = [ 
+          `1100100011`, 
+          `1100000011`,
+          `1100000011`, 
+          `1100000011`,
+          `1100000011`, 
+          `1100000011`,
+          `0000000000`, 
+          `1100000011`,
+          `0000000000`, 
+          `1100100011`          
+                        ];
         board = new Board(array);
       })
+      
       it("but a living cell(x,y) is not included in the sum of neighbours", () => {
-        expect(board.countNeigbours(0,0)).to.equal(3);
+        console.log(board.toString())
+        expect(board.countNeigbours(1,2)).to.equal(3);
       })
       it("wrapping around over the borders", () => {
-        expect(board.countNeigbours(2,0)).to.equal(4);
-        expect(board.countNeigbours(1,4)).to.equal(2);
-        expect(board.countNeigbours(2,2)).to.equal(2)
+        expect(board.countNeigbours(0,3)).to.equal(2);
+        expect(board.countNeigbours(6,0)).to.equal(6);
       })
       
       
@@ -131,9 +159,16 @@ describe("The Game Of Life rules:", () => {
       let board = new Board(array);
       board.tick()
       expect(board.toString()).to.equal(
-        `000
-000
-000
+`0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
 `
 );
     })
@@ -142,9 +177,16 @@ describe("The Game Of Life rules:", () => {
       let board = new Board(array);
       board.tick()
       expect(board.toString()).to.equal(
-        `000
-000
-000
+        `0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
 `
 );
     })
@@ -159,12 +201,18 @@ describe("The Game Of Life rules:", () => {
 let board = new Board(array);
 board.tick();
 expect(board.toString()).to.equal(
-`00000
-01010
-00000
-00100
-00000
-`)
+`0000000000
+0000000000
+0000000000
+0000000000
+0000101000
+0000000000
+0000010000
+0000000000
+0000000000
+0000000000
+`
+)
   });
 
     it("A dead cell with 3 alive neighbours comes alive after a tick", () => {
@@ -176,11 +224,16 @@ expect(board.toString()).to.equal(
       let board = new Board(array);
       board.tick();
       expect(board.toString()).to.equal(
-`00000
-00000
-00100
-00000
-00000
+`0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000010000
+0000000000
+0000000000
+0000000000
+0000000000
 `
       )
     })

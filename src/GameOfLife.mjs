@@ -151,13 +151,15 @@ export class Board {
   constructor(file) {
     this.#file = file;
     if (file instanceof Array) {
-      this.#rows = this.#file.length;
-      this.#cols = this.#file[0].length;
+      this.#rows = 10;
+      this.#cols = 10;
+      const patternHeight = file.length;
+      const patternWidth = file[0].length;
       this.#board = new Array(this.#rows);
       this.initializeEmptyBoard(this.#board);
-      for (let i = 0; i < this.#rows; i++) {
-        for (let j = 0; j < this.#cols; j++) {
-          this.#board[i][j] = parseInt(this.#file[i][j]);
+      for (let i = 0; i < patternHeight; i++) {
+        for (let j = 0; j < patternWidth; j++) {
+          this.#board[5-Math.floor(patternWidth / 2) +i][5 - Math.floor(patternHeight / 2)+ j] = parseInt(this.#file[i][j]);
         }
       }
     }
