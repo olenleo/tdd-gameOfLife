@@ -375,10 +375,6 @@ describe("When writing .rle files", () => {
     expect(test.parseArrayToRLE()).to.equal("10o$10o$10o$10o$10o$10o$10o$10o$10o$10o!\n")
   });
   it("A rle string is properly parsed", () => {
-    // Ok, I'm starting to regret the 10x10 attempt.
-    // But I'll follow through; I need to test with 10x10 arrays, that's all.
-    // 
-
     const test = new TestArrayToRLE(blinkerArr)
     expect(test.parseArrayToRLE()).to.equal(blinkerArrToRLE)
 

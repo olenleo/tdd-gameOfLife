@@ -28,11 +28,9 @@ export class TestArrayToRLE {
     Tracking the sum of 1 and 0 *entries* lets us insert the '$'.
     Tracking the difference between the current char and the previous char lets us parse the repetition.
   */
+  //  -36b$10b$10b$10b$10b$10b$10b$10b$10b$10b!
+  //  +3o7b$10b$10b$10b$10b$10b$10b$10b$10b$10b!
 
-
-    /*
-    I need to calculate the pattern between the $ symbols.
-    */
    parseArrayToRLE() {
     console.log('Test class: parseArr')
     let s = this.arrayToString()
@@ -76,7 +74,7 @@ export class TestArrayToRLE {
       } else {
         ret = char + "$"
       }
-      return val + ret;
+      return (val + ret);
     } 
     return (val + ret)
   }
