@@ -311,14 +311,16 @@ describe("When the tick limit has been reached:", () => {
   // Without the dimensions and string the game could not be played.
   // The .rle strings should be identical when the functionality is implemented
   it("the file './result.rle' can be imported into the program", () => {
+    const modifiedBlinkerRLE = "10b$10b$10b$5b3o2b$10b$10b$10b$10b$10b$10b!\n"
     game.play();
     const data1 = read();
     try {fs.unlink("./result.rle")} catch(e) {console.log('After: File already deleted.')}
     const newGame = new GameOfLife('./result.rle', 0);
     newGame.play()
     const data2 = read();
-    console.log(data1)
-    console.log(data2)
+    expect(data1).to.equal(data2) // This does not check the content!
+    expect(data1).to.contain(modifiedBlinkerRLE); // If the encoded rle pattern exists, import should work as intended.
+    
 
   })
 
@@ -328,7 +330,7 @@ describe("When writing .rle files", () => {
   // I need to implement testing to make sure the rle parsing works as intended.
   let game;
   const blinkerFile = "./patterns/blinker.rle";
-  const modifiedBlinkerRLE = "10b$10b$10b$5b3o2b$10b$10b$10b$10b$10b$10b!\n";
+  const modifiedBlinkerRLE = "10b$10b$10b$5b3o2b$10b$10b$10b$10b$10b$10b!\n"; 
   const blinkerArrToRLE = "3o7b$10b$10b$10b$10b$10b$10b$10b$10b$10b!\n"
   const blinkerArr = [
     [1,1,1,0,0,0,0,0,0,0],
@@ -395,6 +397,7 @@ describe("When writing .rle files", () => {
     const test = new TestArrayToRLE(blinkerArr)
     expect(test.parseArrayToRLE()).to.equal(blinkerArrToRLE)
   })
+
 })
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
