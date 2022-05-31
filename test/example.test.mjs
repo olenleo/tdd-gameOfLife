@@ -328,7 +328,9 @@ describe("When writing .rle files", () => {
   // I need to implement testing to make sure the rle parsing works as intended.
   let game;
   const blinkerFile = "./patterns/blinker.rle";
+
   const modifiedBlinkerRLE = "10b$10b$10b$5b3o2b$10b$10b$10b$10b$10b$10b!\n";
+  const blinkerArrToRLE = "3o7b$10b$10b$10b$10b$10b$10b$10b$10b$10b!\n"
   it("A rle string is properly parsed", () => {
     // Ok, I'm starting to regret the 10x10 attempt.
     // But I'll follow through; I need to test with 10x10 arrays, that's all.
@@ -346,7 +348,7 @@ describe("When writing .rle files", () => {
     [0,0,0,0,0,0,0,0,0,0]
   ]
     const test = new TestArrayToRLE(blinkerArr)
-    expect(test.parseArrayToRLE().to.equal(modifiedBlinkerRLE))
+    expect(test.parseArrayToRLE()).to.equal(modifiedBlinkerRLE)
 
   })
 })

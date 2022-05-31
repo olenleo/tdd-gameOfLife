@@ -7,34 +7,31 @@ import fs from "fs";
 export class TestArrayToRLE {
   #board
   constructor(board) {
+    console.log('Test class: constructor')
     this.#board = board;
+    
   }
 
-   parseArrayToRLE( string ) {
-    let s;
-    if (!string) {
-    s = this.arrayToString()
-    } else {
-      s = string;
-    }
+   parseArrayToRLE() {
+    console.log('Test class: parseArr')
+    let s = this.arrayToString()
+    
     let rle = "";
     for (let i = 0; i < s.length; i++) {
 
     }
-    return rle + "!\n"
+    return "TODO"
   }
 
-   reverseString(s) {
-    return s.split("").reverse().join("")
-  }
-   arrayToString() {
-    let s = ""
-    for (let row = 9; row >= 0; row--) {
-      for (let col = 9; col >= 0; col--) {
-        s += this.getStateOfCell(this.#board, row,col)
-      }
+  arrayToString() {
+  let s = ""
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      s += this.getStateOfCell(this.#board, row,col)
     }
-    return this.reverseString(s);
+  }
+  console.log('Test class: ArrayToString output', s)
+  return s
   }
 
   getStateOfCell(board, row, col) {
