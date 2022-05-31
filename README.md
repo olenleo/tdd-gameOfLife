@@ -1,6 +1,6 @@
-# New JavaScript Project
+# The Game of Life developed using TDD
 
-An empty project with JavaScript testing tools preconfigured. Do whatever you like with it.
+This is the University Of Helsinki TDD course exercise 6.
 
 ## Prerequisites
 
