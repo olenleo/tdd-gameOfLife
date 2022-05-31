@@ -6,7 +6,7 @@ import fs from "fs";
 // This is a bit clumsy but it should work!
 export class TestArrayToRLE {
   #board
-  #reps = 0;
+  #reps = 1;
   constructor(board) {
     console.log('Test class: constructor')
     this.#board = board;
@@ -28,8 +28,10 @@ export class TestArrayToRLE {
     Tracking the sum of 1 and 0 *entries* lets us insert the '$'.
     Tracking the difference between the current char and the previous char lets us parse the repetition.
   */
-  //  -36b$10b$10b$10b$10b$10b$10b$10b$10b$10b!
-  //  +3o7b$10b$10b$10b$10b$10b$10b$10b$10b$10b!
+  /*
+    Maybe I'll just pause again and keep at it.
+
+  */
 
    parseArrayToRLE() {
     console.log('Test class: parseArr')
@@ -38,45 +40,53 @@ export class TestArrayToRLE {
     
     let curr = s[0];
     let next = s[1];
-
-    for (let i = 0; i < s.length; i++) {
-      if (i % 10 === 0) {
-        rle += this.handleInsert(curr, this.#reps, i);
-        this.#reps = 0;
+    
+    for (let i = 1; i < s.length; i++) {
+      if (i % 10 === 0 && i !== 0) {
+        rle += this.handleInsert(curr, next,  this.#reps, i);
+        this.#reps = 1;
       }
       if (next != curr) {
-        rle += this.handleInsert(curr, this.#reps, i);
-        this.#reps = 0;
+        rle += this.handleInsert(curr, next,  this.#reps, i);
+        this.#reps = 1;
       } else {
         this.#reps++;
       }
       curr = s[i];
       next = s[i+1];
+      
     }
-    rle += this.handleInsert(curr, this.#reps, s.length)
+    rle += this.handleInsert(curr, next,  this.#reps, s.length);
     return rle + "!\n"
   }
-  handleInsert(curr, reps, i) {
+  
+  handleInsert(curr, next, reps, i) {
     let val = "";
     let ret = ""
-    function handleChar() {    
-      if (parseInt(curr) === 0) { return "b"; } else {return "o"; }
-     }
-    let char = handleChar();
-  
+    function handleChar(c) {    
+      if (parseInt(c) === 0) { return "b"; } else {return "o"; }
+    }
+
+    let char = handleChar(curr);
+    let nextChar = handleChar(next)
+    console.log(i, char, nextChar)
     if (reps > 0) {
       val += reps;
     }
+    if (reps > 10) { // I placed a ceiling on the 'reps'. Hope it works out.
+      val = 10;  
+    }
     if (i % 10 === 0 && i !== 0) {
-      console.log('i:',i)
       if (i == 100) {
-      ret = char;
+      return val + char;
       } else {
-        ret = char + "$"
+        return val + char + "$"
       }
-      return (val + ret);
     } 
-    return (val + ret)
+    
+    ret = char;
+    return val + ret
+    
   }
 
   arrayToString() {
@@ -86,7 +96,7 @@ export class TestArrayToRLE {
       s += this.getStateOfCell(this.#board, row,col)
     }
   }
-  console.log('Test class: ArrayToString output', s)
+  
   return s
   }
 
@@ -134,8 +144,7 @@ export class GameOfLife {
   writeResultFile() {
     const path = "./result.rle";
     const header = this.#fullRLEHeader +  this.parseArrayToRLE();
-    try {fs.writeFileSync(path, header)
-    console.log('File write complete')} catch (e) {console.log(e)}
+    try {fs.writeFileSync(path, header)} catch (e) {console.log(e)}
     
   }
 
