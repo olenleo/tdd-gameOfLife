@@ -1,5 +1,46 @@
 import fs from "fs";
 
+// I'm not sure if this is 100% reliable.
+// But since I'm only testing the internal functionality of this function I should be able to copy it into the main program later.
+// Of course I will need to test it in the GameOfLife class context.
+// This is a bit clumsy but it should work!
+export class TestArrayToRLE {
+  #board
+  constructor(board) {
+    this.#board = board;
+  }
+
+   parseArrayToRLE( string ) {
+    let s;
+    if (!string) {
+    s = this.arrayToString()
+    } else {
+      s = string;
+    }
+    let rle = "";
+    for (let i = 0; i < s.length; i++) {
+
+    }
+    return rle + "!\n"
+  }
+
+   reverseString(s) {
+    return s.split("").reverse().join("")
+  }
+   arrayToString() {
+    let s = ""
+    for (let row = 9; row >= 0; row--) {
+      for (let col = 9; col >= 0; col--) {
+        s += this.getStateOfCell(this.#board, row,col)
+      }
+    }
+    return this.reverseString(s);
+  }
+
+  getStateOfCell(board, row, col) {
+    return board[row][col]
+  }
+}
 export class GameOfLife {
   #tickLimit;
   #tick;
@@ -98,21 +139,46 @@ export class GameOfLife {
     + this.#fileData.match(ruleRegex);
   }
 
-  parseArrayToRLE() {
-    // start from end
-    // save current symbol, then repetitions
-    // should be relatively simple with the help of width and height.
-    // Of course non-square patterns cause problems.
-    // Since we are enlarging the board, we need to take into account the entire playing field.
-    
+  reverseString(s) {
+    return s.split("").reverse().join("")
+  }
+  arrayToString() {
     let s = ""
-    console.log(this.getBoard().toString())
     for (let row = 9; row >= 0; row--) {
       for (let col = 9; col >= 0; col--) {
         s += this.#board.getStateOfCell(row,col)
       }
     }
-    return s
+    return this.reverseString(s);
+  }
+   /*
+    Rules:
+      s   |   rle
+      1   |   'o'
+      0   |   'b'
+      line|   '$'
+      end |   '!'
+    We know the pattern width (10) and length (10).
+    If the sum of repetitions and 'b' and 'o' symbols equals 10, append '$'
+    The end can be added @ the return.
+    */
+    /*
+    This should be done in one for-loop.
+    Tracking the sum of 1 and 0 *entries* lets us insert the '$'.
+    Tracking the difference between the current char and the previous char lets us parse the repetition.
+    */
+  parseArrayToRLE( string ) {
+    let s;
+    if (!string) {
+    s = this.arrayToString()
+    } else {
+      s = string;
+    }
+    let rle = "";
+    for (let i = 0; i < s.length; i++) {
+
+    }
+    return rle + "!\n"
   }
   
   parseRLEtoArray() {
@@ -142,7 +208,6 @@ export class GameOfLife {
           }
         }
       }
-
       toReturn[r] = this.formatRow(row);
     }
     return toReturn;

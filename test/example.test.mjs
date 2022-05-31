@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Board, GameOfLife } from "../src/GameOfLife.mjs";
+import { Board, GameOfLife, TestArrayToRLE } from "../src/GameOfLife.mjs";
 import fs from 'fs'
 describe("A board can be created:", () => {
   let board;
@@ -314,7 +314,7 @@ describe("When the tick limit has been reached:", () => {
     game.play();
     const data1 = read();
     try {fs.unlink("./result.rle")} catch(e) {console.log('After: File already deleted.')}
-    const newGame = new GameOfLife('./result.rle', 0);
+    const newGame = new GameOfLife('./result.rle', 0); // Result.rle does not contain a .rle string.
     newGame.play()
     const data2 = read();
     console.log(data1)
@@ -324,6 +324,32 @@ describe("When the tick limit has been reached:", () => {
 
 })
 
+describe("When writing .rle files", () => {
+  // I need to implement testing to make sure the rle parsing works as intended.
+  let game;
+  const blinkerFile = "./patterns/blinker.rle";
+  const modifiedBlinkerRLE = "10b$10b$10b$5b3o2b$10b$10b$10b$10b$10b$10b!\n";
+  it("A rle string is properly parsed", () => {
+    // Ok, I'm starting to regret the 10x10 attempt.
+    // But I'll follow through; I need to test with 10x10 arrays, that's all.
+    // 
+    const blinkerArr = [
+    [1,1,1,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0]
+  ]
+    const test = new TestArrayToRLE(blinkerArr)
+    expect(test.parseArrayToRLE().to.equal(modifiedBlinkerRLE))
+
+  })
+})
 function arrayEquals(arr1, arr2) {
   if (arr1.length !== arr2.length || arr1[0].length !== arr2[0].length) {
     console.log("error in length");
