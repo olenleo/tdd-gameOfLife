@@ -7,6 +7,7 @@ import fs from "fs";
 export class TestArrayToRLE {
   #board
   #reps = 1;
+  #endline = false;
   constructor(board) {
     console.log('Test class: constructor')
     this.#board = board;
@@ -44,15 +45,22 @@ export class TestArrayToRLE {
     
     for (let i = 1; i < s.length; i++) {
       if (i % 10 === 0 && i !== 0) {
+        console.log('New Line!')
+        this.#endline = true;
         rle += this.handleInsert(curr, next,  this.#reps, i);
         this.#reps = 1;
       }
       if (next != curr) {
         rle += this.handleInsert(curr, next,  this.#reps, i);
         this.#reps = 1;
+        
       } else {
-        this.#reps++;
-      }
+        if (!this.#endline) {
+          this.#reps++;
+        } else {
+          this.#endline = false;
+        }
+    }
       curr = s[i];
       next = s[i+1];
       
@@ -67,7 +75,6 @@ export class TestArrayToRLE {
     function handleChar(c) {    
       if (parseInt(c) === 0) { return "b"; } else {return "o"; }
     }
-
     let char = handleChar(curr);
     let nextChar = handleChar(next)
     console.log(i, char, nextChar)

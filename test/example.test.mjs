@@ -386,10 +386,10 @@ describe("When writing .rle files", () => {
     const test = new TestArrayToRLE(fullArr)
     expect(test.parseArrayToRLE()).to.equal("10o$10o$10o$10o$10o$10o$10o$10o$10o$10o!\n")
   });
-
+  
   it("A board with no repeats returns a correct string", () => {
     const test = new TestArrayToRLE(checkers)
-    expect(test.parseArrayToRLE()).to.equal("obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob!\n")
+    expect(test.parseArrayToRLE()).to.equal("obobobobob$bobobobobo$obobobobob$bobobobobo$obobobobob$bobobobobo$obobobobob$bobobobobo$obobobobob$bobobobobo!\n")
   })
   it("A rle string is properly parsed", () => {
     const test = new TestArrayToRLE(blinkerArr)
