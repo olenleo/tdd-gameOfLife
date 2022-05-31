@@ -9,34 +9,11 @@ export class TestArrayToRLE {
   #reps = 1;
   #endline = false;
   constructor(board) {
-    console.log('Test class: constructor')
     this.#board = board;
     
   }
-   /*
-    Rules:
-      s   |   rle
-      1   |   'o'
-      0   |   'b'
-      line|   '$'
-      end |   '!'
-    We know the pattern width (10) and length (10).
-    If the sum of repetitions and 'b' and 'o' symbols equals 10, append '$'
-    The end can be added @ the return.
-    */
-    /*
-    This should be done in one for-loop.
-    Tracking the sum of 1 and 0 *entries* lets us insert the '$'.
-    Tracking the difference between the current char and the previous char lets us parse the repetition.
-  */
-  /*
-    There are some issues with the repeats and new lines.
-    Repeats should be reset.
-
-  */
 
    parseArrayToRLE() {
-    console.log('Test class: parseArr')
     let s = this.arrayToString()
     let rle = "";
     
@@ -45,7 +22,6 @@ export class TestArrayToRLE {
     
     for (let i = 1; i < s.length; i++) {
       if (i % 10 === 0 && i !== 0) {
-        console.log('New Line!')
         this.#endline = true;
         rle += this.handleInsert(curr, next,  this.#reps, i);
         this.#reps = 1;
@@ -77,7 +53,6 @@ export class TestArrayToRLE {
     }
     let char = handleChar(curr);
     let nextChar = handleChar(next)
-    console.log(i, char, nextChar)
     if (reps > 1) {
       val += reps;
     }
