@@ -314,7 +314,7 @@ describe("When the tick limit has been reached:", () => {
     game.play();
     const data1 = read();
     try {fs.unlink("./result.rle")} catch(e) {console.log('After: File already deleted.')}
-    const newGame = new GameOfLife('./result.rle', 0); // Result.rle does not contain a .rle string.
+    const newGame = new GameOfLife('./result.rle', 0);
     newGame.play()
     const data2 = read();
     console.log(data1)
@@ -365,6 +365,18 @@ describe("When writing .rle files", () => {
     [1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,1,1,1,1]
+  ]
+  const checkers = [
+    [1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,1]
   ]  
   it("An empty board returns the correct string", () => {
     const test = new TestArrayToRLE(emptyArr)
@@ -374,10 +386,14 @@ describe("When writing .rle files", () => {
     const test = new TestArrayToRLE(fullArr)
     expect(test.parseArrayToRLE()).to.equal("10o$10o$10o$10o$10o$10o$10o$10o$10o$10o!\n")
   });
+
+  it("A board with no repeats returns a correct string", () => {
+    const test = new TestArrayToRLE(checkers)
+    expect(test.parseArrayToRLE()).to.equal("obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob$obobobobob!\n")
+  })
   it("A rle string is properly parsed", () => {
     const test = new TestArrayToRLE(blinkerArr)
     expect(test.parseArrayToRLE()).to.equal(blinkerArrToRLE)
-
   })
 })
 function arrayEquals(arr1, arr2) {

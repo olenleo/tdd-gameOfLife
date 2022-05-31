@@ -29,7 +29,8 @@ export class TestArrayToRLE {
     Tracking the difference between the current char and the previous char lets us parse the repetition.
   */
   /*
-    Maybe I'll just pause again and keep at it.
+    There are some issues with the repeats and new lines.
+    Repeats should be reset.
 
   */
 
@@ -70,7 +71,7 @@ export class TestArrayToRLE {
     let char = handleChar(curr);
     let nextChar = handleChar(next)
     console.log(i, char, nextChar)
-    if (reps > 0) {
+    if (reps > 1) {
       val += reps;
     }
     if (reps > 10) { // I placed a ceiling on the 'reps'. Hope it works out.
@@ -83,8 +84,10 @@ export class TestArrayToRLE {
         return val + char + "$"
       }
     } 
-    
     ret = char;
+    if (val === 0) {
+      return char;
+    }
     return val + ret
     
   }
