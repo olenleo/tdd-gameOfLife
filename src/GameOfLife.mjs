@@ -6,21 +6,79 @@ import fs from "fs";
 // This is a bit clumsy but it should work!
 export class TestArrayToRLE {
   #board
+  #reps = 0;
   constructor(board) {
     console.log('Test class: constructor')
     this.#board = board;
     
   }
+   /*
+    Rules:
+      s   |   rle
+      1   |   'o'
+      0   |   'b'
+      line|   '$'
+      end |   '!'
+    We know the pattern width (10) and length (10).
+    If the sum of repetitions and 'b' and 'o' symbols equals 10, append '$'
+    The end can be added @ the return.
+    */
+    /*
+    This should be done in one for-loop.
+    Tracking the sum of 1 and 0 *entries* lets us insert the '$'.
+    Tracking the difference between the current char and the previous char lets us parse the repetition.
+  */
 
+
+    /*
+    I need to calculate the pattern between the $ symbols.
+    */
    parseArrayToRLE() {
     console.log('Test class: parseArr')
     let s = this.arrayToString()
-    
     let rle = "";
-    for (let i = 0; i < s.length; i++) {
+    
+    let curr = s[0];
+    let next = s[1];
 
+    for (let i = 0; i < s.length; i++) {
+      if (i % 10 === 0) {
+        rle += this.handleInsert(curr, this.#reps, i);
+        this.#reps = 0;
+      }
+      if (next != curr) {
+        rle += this.handleInsert(curr, this.#reps, i);
+        this.#reps = 0;
+      } else {
+        this.#reps++;
+      }
+      curr = s[i];
+      next = s[i+1];
     }
-    return "TODO"
+    rle += this.handleInsert(curr, this.#reps, s.length)
+    return rle + "!\n"
+  }
+  handleInsert(c, reps, i) {
+    let val = "";
+    let ret = ""
+    function handleChar() {    
+      if (parseInt(c) === 0) { return "b"; } else {return "o"; }
+     }
+    let char = handleChar();
+  
+    if (reps > 0) {
+      val += reps;
+    }
+    if (i % 10 === 0 && i !== 0) {
+      console.log('i:',i)
+      if (i == 100) {
+      ret = char;
+      } else {
+        ret = char + "$"
+      }
+      return val + ret;
+    } 
+    return (val + ret)
   }
 
   arrayToString() {
@@ -148,22 +206,7 @@ export class GameOfLife {
     }
     return this.reverseString(s);
   }
-   /*
-    Rules:
-      s   |   rle
-      1   |   'o'
-      0   |   'b'
-      line|   '$'
-      end |   '!'
-    We know the pattern width (10) and length (10).
-    If the sum of repetitions and 'b' and 'o' symbols equals 10, append '$'
-    The end can be added @ the return.
-    */
-    /*
-    This should be done in one for-loop.
-    Tracking the sum of 1 and 0 *entries* lets us insert the '$'.
-    Tracking the difference between the current char and the previous char lets us parse the repetition.
-    */
+  
   parseArrayToRLE( string ) {
     let s;
     if (!string) {
