@@ -354,10 +354,26 @@ describe("When writing .rle files", () => {
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0]
   ]
+  const fullArr = [
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1]
+  ]  
   it("An empty board returns the correct string", () => {
     const test = new TestArrayToRLE(emptyArr)
     expect(test.parseArrayToRLE()).to.equal("10b$10b$10b$10b$10b$10b$10b$10b$10b$10b!\n")
   })
+  it("A full board returns the correct string", () => {
+    const test = new TestArrayToRLE(fullArr)
+    expect(test.parseArrayToRLE()).to.equal("10o$10o$10o$10o$10o$10o$10o$10o$10o$10o!\n")
+  });
   it("A rle string is properly parsed", () => {
     // Ok, I'm starting to regret the 10x10 attempt.
     // But I'll follow through; I need to test with 10x10 arrays, that's all.

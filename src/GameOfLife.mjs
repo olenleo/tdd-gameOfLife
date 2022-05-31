@@ -58,11 +58,11 @@ export class TestArrayToRLE {
     rle += this.handleInsert(curr, this.#reps, s.length)
     return rle + "!\n"
   }
-  handleInsert(c, reps, i) {
+  handleInsert(curr, reps, i) {
     let val = "";
     let ret = ""
     function handleChar() {    
-      if (parseInt(c) === 0) { return "b"; } else {return "o"; }
+      if (parseInt(curr) === 0) { return "b"; } else {return "o"; }
      }
     let char = handleChar();
   
