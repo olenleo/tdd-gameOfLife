@@ -128,13 +128,7 @@ describe("The Game Of Life rules:", () => {
       expect(board.countNeigbours(6, 0)).to.equal(6);
     });
   });
-  // I think I will simply write new arrays for each test.
-  // This takes some more time & adds lines of code
-  // Butxit will save up some stream recording time as I'm bound to mess up some array if I get too tricky.
-
-  // Due to the update algorithm this does not actually test anything yet.
-  // I probably should plan out a good order of tests
-  // Or just do several ones that support each other.
+  
  it("A cell with 0 neighbours dies after a tick()", () => {
     const array = [`000`, `010`, `000`];
     let board = new Board(array);
