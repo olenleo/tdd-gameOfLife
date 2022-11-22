@@ -1,6 +1,7 @@
 # The Game of Life developed using TDD
 
 This is the University Of Helsinki TDD course exercise 6.
+The assignment was to code Conways 'Game of Life' using Test Driven Development methods.
 
 ## Prerequisites
 
